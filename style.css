@@ -13,3 +13,11 @@ h1{
 p{
     font-size: 20px;
 }
+button{
+    background-color: #00ff99;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+}
