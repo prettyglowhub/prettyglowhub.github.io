@@ -21,3 +21,7 @@ button{
     border-radius: 8px;
     font-size: 18px;
 }
+button:hover{
+    background-color: white;
+    color: green;
+}
