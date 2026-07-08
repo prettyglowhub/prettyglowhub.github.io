@@ -52,3 +52,8 @@ nav a:hover{
 nav h2{
     color: #00ff99;
 }
+nav{
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+}
