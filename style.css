@@ -57,3 +57,7 @@ nav{
     justify-content: space-between;
     margin: 20px;
 }
+nav div{
+    display: flex;
+    gap: 20px;
+}
