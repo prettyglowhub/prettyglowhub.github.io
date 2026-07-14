@@ -55,6 +55,13 @@
             gap: 0.5rem;
             font-size: 0.9rem;
             color: var(--gray);
+            border: none;
+            outline: none;
+            font-family: inherit;
+        }
+        
+        .search-box::placeholder {
+            color: var(--gray);
         }
         
         .cart-icon-top {
@@ -340,6 +347,15 @@
             cursor: pointer;
         }
         
+        .no-results {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--gray);
+            grid-column: 1 / -1;
+        }
+        
+        .no-results-icon { font-size: 3rem; margin-bottom: 1rem; }
+        
         .cart-overlay {
             position: fixed;
             top: 0;
@@ -514,6 +530,114 @@
             margin-top: 0.5rem;
         }
         
+        /* PROFILE PAGE */
+        .profile-page {
+            display: none;
+            min-height: 100vh;
+            background: var(--light-gray);
+            padding-bottom: 80px;
+        }
+        
+        .profile-page.show { display: block; }
+        
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--red) 100%);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+        
+        .profile-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        
+        .profile-phone {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 0.3rem;
+        }
+        
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            background: var(--white);
+            padding: 1rem;
+            margin: -1.5rem 1rem 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-num {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-top: 0.2rem;
+        }
+        
+        .profile-menu {
+            background: var(--white);
+            margin: 1rem;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #f1f2f6;
+            cursor: pointer;
+        }
+        
+        .menu-item:last-child { border-bottom: none; }
+        
+        .menu-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--light-gray);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .menu-text {
+            flex: 1;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .menu-arrow {
+            color: var(--gray);
+            font-size: 1.2rem;
+        }
+        
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -551,66 +675,133 @@
         .empty-cart-text { font-size: 1rem; }
         
         .hide-scroll::-webkit-scrollbar { display: none; }
+        
+        .home-page { display: block; }
+        .home-page.hide { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="top-bar">
-        <div class="logo-text">⚡ SCAR'S</div>
-        <div class="search-box">
-            🔍 Search products...
+    <!-- HOME PAGE -->
+    <div class="home-page" id="home-page">
+        <div class="top-bar">
+            <div class="logo-text">⚡ SCAR'S</div>
+            <input type="text" class="search-box" id="search-input" placeholder="🔍 Search products..." oninput="searchProducts()">
+            <div class="cart-icon-top" onclick="openCart()">
+                🛒
+                <span class="cart-badge" id="cart-badge">0</span>
+            </div>
         </div>
-        <div class="cart-icon-top" onclick="openCart()">
-            🛒
-            <span class="cart-badge" id="cart-badge">0</span>
+
+        <div class="flash-banner">
+            <div class="flash-text">
+                ⚡ FLASH SALE
+                <span style="font-size:0.75rem;opacity:0.8;">Ends in:</span>
+            </div>
+            <div class="countdown" id="countdown">04:23:17</div>
+        </div>
+
+        <div class="categories hide-scroll">
+            <button class="cat-pill active">All</button>
+            <button class="cat-pill">Electronics</button>
+            <button class="cat-pill">Fashion</button>
+            <button class="cat-pill">Home</button>
+            <button class="cat-pill">Beauty</button>
+            <button class="cat-pill">Sports</button>
+            <button class="cat-pill">Toys</button>
+        </div>
+
+        <div class="promo-scroll hide-scroll">
+            <div class="promo-card">
+                <div class="promo-title">MEGA DEALS</div>
+                <div class="promo-sub">Up to 70% off everything</div>
+                <div class="promo-code">Code: SCAR70</div>
+            </div>
+            <div class="promo-card" style="background:linear-gradient(135deg,#764ba2 0%,#f093fb 100%);">
+                <div class="promo-title">FREE SHIPPING</div>
+                <div class="promo-sub">On all orders over ₦10,000</div>
+                <div class="promo-code">No code needed</div>
+            </div>
+            <div class="promo-card" style="background:linear-gradient(135deg,#11998e 0%,#38ef7d 100%);">
+                <div class="promo-title">NEW ARRIVALS</div>
+                <div class="promo-sub">Fresh drops every day</div>
+                <div class="promo-code">Shop now →</div>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <div class="section-title">
+                🔥 Hot Deals
+            </div>
+            <span class="see-all">See all ></span>
+        </div>
+
+        <div class="products-grid" id="products"></div>
+    </div>
+
+    <!-- PROFILE PAGE -->
+    <div class="profile-page" id="profile-page">
+        <div class="profile-header">
+            <div class="profile-avatar">👤</div>
+            <div class="profile-name">Scar</div>
+            <div class="profile-phone">+234 810 976 3849</div>
+        </div>
+        
+        <div class="profile-stats">
+            <div class="stat-item">
+                <div class="stat-num" id="stat-orders">0</div>
+                <div class="stat-label">Orders</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num" id="stat-cart">0</div>
+                <div class="stat-label">In Cart</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">⭐</div>
+                <div class="stat-label">Points</div>
+            </div>
+        </div>
+        
+        <div class="profile-menu">
+            <div class="menu-item">
+                <div class="menu-icon">📦</div>
+                <div class="menu-text">My Orders</div>
+                <div class="menu-arrow">›</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">❤️</div>
+                <div class="menu-text">Wishlist</div>
+                <div class="menu-arrow">›</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">📍</div>
+                <div class="menu-text">Addresses</div>
+                <div class="menu-arrow">›</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">💳</div>
+                <div class="menu-text">Payment Methods</div>
+                <div class="menu-arrow">›</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">🎁</div>
+                <div class="menu-text">Coupons</div>
+                <div class="menu-arrow">›</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">⚙️</div>
+                <div class="menu-text">Settings</div>
+                <div class="menu-arrow">›</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">❓</div>
+                <div class="menu-text">Help Center</div>
+                <div class="menu-arrow">›</div>
+            </div>
         </div>
     </div>
 
-    <div class="flash-banner">
-        <div class="flash-text">
-            ⚡ FLASH SALE
-            <span style="font-size:0.75rem;opacity:0.8;">Ends in:</span>
-        </div>
-        <div class="countdown" id="countdown">04:23:17</div>
-    </div>
-
-    <div class="categories hide-scroll">
-        <button class="cat-pill active">All</button>
-        <button class="cat-pill">Electronics</button>
-        <button class="cat-pill">Fashion</button>
-        <button class="cat-pill">Home</button>
-        <button class="cat-pill">Beauty</button>
-        <button class="cat-pill">Sports</button>
-        <button class="cat-pill">Toys</button>
-    </div>
-
-    <div class="promo-scroll hide-scroll">
-        <div class="promo-card">
-            <div class="promo-title">MEGA DEALS</div>
-            <div class="promo-sub">Up to 70% off everything</div>
-            <div class="promo-code">Code: SCAR70</div>
-        </div>
-        <div class="promo-card" style="background:linear-gradient(135deg,#764ba2 0%,#f093fb 100%);">
-            <div class="promo-title">FREE SHIPPING</div>
-            <div class="promo-sub">On all orders over $25</div>
-            <div class="promo-code">No code needed</div>
-        </div>
-        <div class="promo-card" style="background:linear-gradient(135deg,#11998e 0%,#38ef7d 100%);">
-            <div class="promo-title">NEW ARRIVALS</div>
-            <div class="promo-sub">Fresh drops every day</div>
-            <div class="promo-code">Shop now →</div>
-        </div>
-    </div>
-
-    <div class="section-header">
-        <div class="section-title">
-            🔥 Hot Deals
-        </div>
-        <span class="see-all">See all ></span>
-    </div>
-
-    <div class="products-grid" id="products"></div>
-
+    <!-- CART BOTTOM SHEET -->
     <div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
     <div class="cart-sheet" id="cart-sheet">
         <div class="cart-header">
@@ -623,7 +814,7 @@
         <div class="cart-footer">
             <div class="cart-total-row">
                 <span class="cart-total-label">Total:</span>
-                <span class="cart-total-amount">$<span id="cart-total">0</span></span>
+                <span class="cart-total-amount">₦<span id="cart-total">0</span></span>
             </div>
             <button class="checkout-btn" onclick="showCheckout()">Proceed to Checkout</button>
             
@@ -647,20 +838,21 @@
         </div>
     </div>
 
+    <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
-        <button class="nav-item active">
+        <button class="nav-item active" id="nav-home" onclick="showPage('home')">
             <span class="nav-icon">🏠</span>
             <span>Home</span>
         </button>
-        <button class="nav-item">
+        <button class="nav-item" id="nav-deals">
             <span class="nav-icon">🏷️</span>
             <span>Deals</span>
         </button>
-        <button class="nav-item" onclick="openCart()">
+        <button class="nav-item" id="nav-cart" onclick="openCart()">
             <span class="nav-icon">🛒</span>
             <span>Cart</span>
         </button>
-        <button class="nav-item">
+        <button class="nav-item" id="nav-me" onclick="showPage('profile')">
             <span class="nav-icon">👤</span>
             <span>Me</span>
         </button>
@@ -670,25 +862,26 @@
         const YOUR_WHATSAPP_NUMBER = "2348109763849";
         
         const products = [
-            { id: 1, name: "Premium Wireless Headphones with Noise Cancellation", price: 29.99, originalPrice: 79.99, image: "product1.jpg.jpg", badge: "hot", badgeText: "HOT", rating: 4.8, reviews: 1243, sold: 8560 },
-            { id: 2, name: "Smart Fitness Watch Heart Rate Monitor", price: 19.99, originalPrice: 49.99, image: "product2.jpg.jpg", badge: "sale", badgeText: "-60%", rating: 4.6, reviews: 892, sold: 5430 },
-            { id: 3, name: "Minimal Waterproof Laptop Backpack 20L", price: 15.99, originalPrice: 39.99, image: "product3.jpg.jpg", badge: "free", badgeText: "FREE SHIP", rating: 4.7, reviews: 2156, sold: 12300 },
-            { id: 4, name: "Ergonomic Wireless Mouse Rechargeable Silent", price: 9.99, originalPrice: 24.99, image: "product4.jpg.jpg", badge: "sale", badgeText: "-60%", rating: 4.5, reviews: 567, sold: 3400 },
-            { id: 5, name: "LED Desk Lamp Dimmable USB Touch Control", price: 12.99, originalPrice: 29.99, image: "product5.jpg.jpg", badge: "low", badgeText: "LOW STOCK", rating: 4.4, reviews: 445, sold: 2890 },
-            { id: 6, name: "Aluminum Phone Stand Adjustable Foldable", price: 6.99, originalPrice: 15.99, image: "product6.jpg.jpg", badge: "hot", badgeText: "HOT", rating: 4.9, reviews: 3201, sold: 15600 },
-            { id: 7, name: "Bluetooth Speaker Portable Waterproof Bass", price: 17.99, originalPrice: 45.99, image: "product7.jpg.jpg", badge: "sale", badgeText: "-61%", rating: 4.3, reviews: 778, sold: 4200 },
-            { id: 8, name: "USB-C Fast Charger 65W 3-Port GaN", price: 11.99, originalPrice: 29.99, image: "product8.jpg.jpg", badge: "free", badgeText: "FREE SHIP", rating: 4.7, reviews: 1567, sold: 8900 },
-            { id: 9, name: "Mechanical Keyboard RGB Backlit 87 Keys", price: 34.99, originalPrice: 89.99, image: "product9.jpg.jpg", badge: "hot", badgeText: "HOT", rating: 4.6, reviews: 923, sold: 5100 },
-            { id: 10, name: "Webcam 1080P HD with Microphone Auto Focus", price: 14.99, originalPrice: 39.99, image: "product10.jpg.jpg", badge: "sale", badgeText: "-63%", rating: 4.5, reviews: 667, sold: 3800 },
-            { id: 11, name: "Wireless Earbuds Bluetooth 5.3 Touch Control", price: 13.99, originalPrice: 34.99, image: "product11.jpg.jpg", badge: "low", badgeText: "LOW STOCK", rating: 4.4, reviews: 2341, sold: 11200 },
-            { id: 12, name: "Laptop Cooling Pad 6 Fans RGB LED", price: 21.99, originalPrice: 54.99, image: "product12.jpg.jpg", badge: "free", badgeText: "FREE SHIP", rating: 4.8, reviews: 445, sold: 2600 },
-            { id: 13, name: "Portable Power Bank 20000mAh Fast Charge", price: 18.99, originalPrice: 44.99, image: "product13.jpg.jpg", badge: "hot", badgeText: "HOT", rating: 4.7, reviews: 1876, sold: 9800 },
-            { id: 14, name: "Tablet Stand Adjustable Aluminum Foldable", price: 8.99, originalPrice: 22.99, image: "product14.jpg.jpg", badge: "sale", badgeText: "-61%", rating: 4.5, reviews: 334, sold: 2100 },
-            { id: 15, name: "Smart LED Strip Lights 10M RGB App Control", price: 10.99, originalPrice: 27.99, image: "product15.jpg.jpg", badge: "free", badgeText: "FREE SHIP", rating: 4.6, reviews: 1567, sold: 7400 },
-            { id: 16, name: "Gaming Mouse Pad Large RGB Extended", price: 7.99, originalPrice: 19.99, image: "product16.jpg.jpg", badge: "hot", badgeText: "HOT", rating: 4.7, reviews: 1123, sold: 8900 }
+            { id: 1, name: "Premium Wireless Headphones with Noise Cancellation", price: 4500, originalPrice: 12000, image: "product1.jpg.jpg", badge: "hot", badgeText: "HOT", rating: 4.8, reviews: 1243, sold: 8560 },
+            { id: 2, name: "Smart Fitness Watch Heart Rate Monitor", price: 3500, originalPrice: 8500, image: "product2.jpg.jpg", badge: "sale", badgeText: "-60%", rating: 4.6, reviews: 892, sold: 5430 },
+            { id: 3, name: "Minimal Waterproof Laptop Backpack 20L", price: 2800, originalPrice: 7000, image: "product3.jpg.jpg", badge: "free", badgeText: "FREE SHIP", rating: 4.7, reviews: 2156, sold: 12300 },
+            { id: 4, name: "Ergonomic Wireless Mouse Rechargeable Silent", price: 1800, originalPrice: 4500, image: "product4.jpg.jpg", badge: "sale", badgeText: "-60%", rating: 4.5, reviews: 567, sold: 3400 },
+            { id: 5, name: "LED Desk Lamp Dimmable USB Touch Control", price: 2200, originalPrice: 5500, image: "product5.jpg.jpg", badge: "low", badgeText: "LOW STOCK", rating: 4.4, reviews: 445, sold: 2890 },
+            { id: 6, name: "Aluminum Phone Stand Adjustable Foldable", price: 1200, originalPrice: 3000, image: "product6.jpg.jpg", badge: "hot", badgeText: "HOT", rating: 4.9, reviews: 3201, sold: 15600 },
+            { id: 7, name: "Bluetooth Speaker Portable Waterproof Bass", price: 3200, originalPrice: 8000, image: "product7.jpg.jpg", badge: "sale", badgeText: "-61%", rating: 4.3, reviews: 778, sold: 4200 },
+            { id: 8, name: "USB-C Fast Charger 65W 3-Port GaN", price: 2500, originalPrice: 6000, image: "product8.jpg.jpg", badge: "free", badgeText: "FREE SHIP", rating: 4.7, reviews: 1567, sold: 8900 },
+            { id: 9, name: "Mechanical Keyboard RGB Backlit 87 Keys", price: 6500, originalPrice: 16000, image: "product9.jpg.jpg", badge: "hot", badgeText: "HOT", rating: 4.6, reviews: 923, sold: 5100 },
+            { id: 10, name: "Webcam 1080P HD with Microphone Auto Focus", price: 2800, originalPrice: 7000, image: "product10.jpg.jpg", badge: "sale", badgeText: "-63%", rating: 4.5, reviews: 667, sold: 3800 },
+            { id: 11, name: "Wireless Earbuds Bluetooth 5.3 Touch Control", price: 2600, originalPrice: 6500, image: "product11.jpg.jpg", badge: "low", badgeText: "LOW STOCK", rating: 4.4, reviews: 2341, sold: 11200 },
+            { id: 12, name: "Laptop Cooling Pad 6 Fans RGB LED", price: 4200, originalPrice: 10500, image: "product12.jpg.jpg", badge: "free", badgeText: "FREE SHIP", rating: 4.8, reviews: 445, sold: 2600 },
+            { id: 13, name: "Portable Power Bank 20000mAh Fast Charge", price: 3800, originalPrice: 9500, image: "product13.jpg.jpg", badge: "hot", badgeText: "HOT", rating: 4.7, reviews: 1876, sold: 9800 },
+            { id: 14, name: "Tablet Stand Adjustable Aluminum Foldable", price: 1500, originalPrice: 3800, image: "product14.jpg.jpg", badge: "sale", badgeText: "-61%", rating: 4.5, reviews: 334, sold: 2100 },
+            { id: 15, name: "Smart LED Strip Lights 10M RGB App Control", price: 2000, originalPrice: 5000, image: "product15.jpg.jpg", badge: "free", badgeText: "FREE SHIP", rating: 4.6, reviews: 1567, sold: 7400 },
+            { id: 16, name: "Gaming Mouse Pad Large RGB Extended", price: 1800, originalPrice: 4500, image: "product16.jpg.jpg", badge: "hot", badgeText: "HOT", rating: 4.7, reviews: 1123, sold: 8900 }
         ];
 
         let cart = [];
+        let currentProducts = [...products];
 
         function getDiscount(original, current) {
             return Math.round(((original - current) / original) * 100);
@@ -706,9 +899,20 @@
             return num;
         }
 
-        function renderProducts() {
+        function renderProducts(productList = products) {
             const container = document.getElementById('products');
-            container.innerHTML = products.map(p => {
+            
+            if (productList.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <div class="no-results-icon">🔍</div>
+                        <div>No products found</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = productList.map(p => {
                 const discount = getDiscount(p.originalPrice, p.price);
                 return `
                 <div class="product-card">
@@ -724,8 +928,8 @@
                             <span>${p.rating} (${formatNumber(p.reviews)})</span>
                         </div>
                         <div class="price-row">
-                            <span class="current-price">$${p.price}</span>
-                            <span class="original-price">$${p.originalPrice}</span>
+                            <span class="current-price">₦${p.price.toLocaleString()}</span>
+                            <span class="original-price">₦${p.originalPrice.toLocaleString()}</span>
                             <span class="discount-tag">-${discount}%</span>
                         </div>
                         <div class="sold-row">
@@ -736,6 +940,20 @@
                 </div>
                 `;
             }).join('');
+        }
+
+        function searchProducts() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            
+            if (query === '') {
+                currentProducts = [...products];
+            } else {
+                currentProducts = products.filter(p => 
+                    p.name.toLowerCase().includes(query)
+                );
+            }
+            
+            renderProducts(currentProducts);
         }
 
         function addToCart(id) {
@@ -769,6 +987,7 @@
             
             document.getElementById('cart-count').textContent = totalItems;
             document.getElementById('cart-badge').textContent = totalItems;
+            document.getElementById('stat-cart').textContent = totalItems;
             
             const itemsContainer = document.getElementById('cart-items');
             
@@ -786,7 +1005,7 @@
                         <img src="${item.image}" class="cart-item-img" onerror="this.style.display='none'">
                         <div class="cart-item-info">
                             <div class="cart-item-name">${item.name}</div>
-                            <div class="cart-item-price">$${(item.price * item.qty).toFixed(2)}</div>
+                            <div class="cart-item-price">₦${(item.price * item.qty).toLocaleString()}</div>
                             <div class="qty-controls">
                                 <button class="qty-btn" onclick="updateQty(${i}, -1)">−</button>
                                 <span class="qty-num">${item.qty}</span>
@@ -798,12 +1017,13 @@
                 `).join('');
             }
             
-            document.getElementById('cart-total').textContent = totalPrice.toFixed(2);
+            document.getElementById('cart-total').textContent = totalPrice.toLocaleString();
         }
 
         function openCart() {
             document.getElementById('cart-sheet').classList.add('open');
             document.getElementById('cart-overlay').classList.add('show');
+            setActiveNav('cart');
         }
 
         function closeCart() {
@@ -836,10 +1056,10 @@
             message += `📦 *Order Items:*%0A`;
             
             cart.forEach((item, i) => {
-                message += `${i + 1}. ${item.name}%0A   Qty: ${item.qty} × $${item.price} = $${(item.price * item.qty).toFixed(2)}%0A`;
+                message += `${i + 1}. ${item.name}%0A   Qty: ${item.qty} × ₦${item.price.toLocaleString()} = ₦${(item.price * item.qty).toLocaleString()}%0A`;
             });
             
-            message += `%0A💰 *Total: $${total.toFixed(2)}*%0A`;
+            message += `%0A💰 *Total: ₦${total.toLocaleString()}*%0A`;
             message += `%0APlease confirm availability and payment method.`;
             
             const whatsappUrl = `https://wa.me/${YOUR_WHATSAPP_NUMBER}?text=${message}`;
@@ -849,6 +1069,27 @@
             updateCart();
             closeCart();
             document.getElementById('checkout-form').reset();
+            
+            const orders = parseInt(document.getElementById('stat-orders').textContent) || 0;
+            document.getElementById('stat-orders').textContent = orders + 1;
+        }
+
+        function showPage(page) {
+            if (page === 'home') {
+                document.getElementById('home-page').classList.remove('hide');
+                document.getElementById('profile-page').classList.remove('show');
+                setActiveNav('home');
+            } else if (page === 'profile') {
+                document.getElementById('home-page').classList.add('hide');
+                document.getElementById('profile-page').classList.add('show');
+                setActiveNav('me');
+            }
+        }
+
+        function setActiveNav(active) {
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            if (active === 'home') document.getElementById('nav-home').classList.add('active');
+            if (active === 'me') document.getElementById('nav-me').classList.add('active');
         }
 
         function startCountdown() {
